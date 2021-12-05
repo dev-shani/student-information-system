@@ -62,6 +62,7 @@ class Admin extends CI_Controller{
             if($user){
                 if($user->status == APPROVED){
                     $this->session->set_userdata('is_logged_in', true);
+                    $this->session->set_userdata('user_id', $user->id);
                     redirect(base_url('admin/home'));
                 }else{
                     $this->session->set_flashdata('error','Your regestration is not approved yet');
@@ -78,6 +79,7 @@ class Admin extends CI_Controller{
 
     public function logout(){
         $this->session->unset_userdata('is_logged_in');
+        $this->session->unset_userdata('user_id');
         redirect(base_url('admin/login'));
     }
 
@@ -224,7 +226,37 @@ class Admin extends CI_Controller{
 
 
     public function allocate_subject(){
-        $this->load->view('Subjects/allocate-subject');
+        $teachers = $this->admin_model->get_users(['role' => TEACHER]);
+        $data['teachers'] = $teachers ? $teachers : '';
+        $classes = $this->admin_model->get_classes();
+        $data['classes'] = $classes ? $classes : '';
+
+        if($this->input->post()){
+            // preview($_POST);
+            $teacher_id = $this->input->post('teacher_id');
+            $class_id = $this->input->post('class_id');
+            $subject_id = $this->input->post('subject_id');
+            $errors = '';
+
+            if(!$errors){
+                $temp_data = [
+                    'teacher_id' => $teacher_id,
+                    'class_id' => $class_id,
+                    'subject_id' => $subject_id
+                ];
+
+                $res = $this->admin_model->insert_allocated_subject($temp_data);
+                if($res){
+                    $this->session->set_flashdata('success', 'Subject allocated successfully');
+                    redirect(base_url('admin/allocate_subject'));
+                }else{
+                    $this->session->set_flashdata('errors', 'Something went wrong!');
+                    redirect(base_url('admin/allocate_subject'));
+                }
+            }
+            
+        }
+        $this->load->view('Subjects/allocate-subject', $data);
     }
 
 
@@ -371,7 +403,122 @@ class Admin extends CI_Controller{
     public function add_student(){
         $classes = $this->admin_model->get_classes();
         $data['classes'] = ($classes ? $classes : '');
+
+        if($this->input->post()){
+            // preview($_POST);
+            $fname = $this->input->post('user_fname');
+            $lname = $this->input->post('user_lname');
+            $email = $this->input->post('user_email');
+            $phone = $this->input->post('user_phone');
+            $city = $this->input->post('user_city');
+            $password = $this->input->post('user_password');
+            $confirm_password = $this->input->post('user_confirm$confirm_password');
+            $fee = $this->input->post('user_fee');
+            $class_id = $this->input->post('class_id');
+            $errors = '';
+
+            if(!$errors){
+                $user_data = [
+                    'first_name' => $fname,
+                    'last_name' => $lname,
+                    'password' => md5($password),
+                    'phone' => $phone,
+                    'city' => $city,
+                    'fee' => $fee,
+                    'phone' => $phone,
+                    'role' => STUDENT,
+                    'status' => APPROVED
+                ];
+
+
+                $user_id = $this->admin_model->add_user($user_data);
+                if($user_id){
+                    $sc_data = [
+                        'student_id' => $user_id,
+                        'class_id' => $class_id,
+                    ];
+                    $res = $this->admin_model->add_student_class($sc_data);
+
+                    if($res){
+                        $this->session->set_flashdata('success', 'Student inserted successfully');
+                        redirect(base_url('admin/students'));
+                    }else{
+                        $this->session->set_flashdata('errors', 'Something went wrong!');
+                        redirect(base_url('admin/students'));
+                    }
+                }
+            }
+            
+        }
+
         $this->load->view('students/add-student', $data);
+    }
+
+    public function edit_student($id){
+        $student = $this->admin_model->get_users(['id' => $id]);
+        $data['student'] = $student ? $student[0] : '';
+        $classes = $this->admin_model->get_classes();
+        $data['classes'] = ($classes ? $classes : '');
+        $class_data = $this->admin_model->get_student_class(['student_id' => $id]);
+        $data['class_id'] = $class_data ? $class_data[0]->class_id : '';
+
+
+        if($this->input->post()){
+            // preview($_POST);
+            $fname = $this->input->post('user_fname');
+            $lname = $this->input->post('user_lname');
+            $email = $this->input->post('user_email');
+            $phone = $this->input->post('user_phone');
+            $city = $this->input->post('user_city');
+            $fee = $this->input->post('user_fee');
+            $class_id = $this->input->post('class_id');
+            $errors = '';
+
+            if(!$errors){
+                $user_data = [
+                    'first_name' => $fname,
+                    'last_name' => $lname,
+                    'phone' => $phone,
+                    'city' => $city,
+                    'fee' => $fee,
+                    'email' => $email,
+                    'phone' => $phone,
+                ];
+
+
+                $user_updated = $this->admin_model->update_user($user_data, ['id' => $id]);
+                if($user_updated){
+                    $sc_data = [
+                        'student_id' => $id,
+                        'class_id' => $class_id,
+                    ];
+                    $res = $this->admin_model->update_student_class($sc_data, ['id' => $class_data[0]->id]);
+
+                    if($res){
+                        $this->session->set_flashdata('success', 'Student updated successfully');
+                        redirect(base_url('admin/edit_student/'.$id));
+                    }else{
+                        $this->session->set_flashdata('errors', 'Something went wrong!');
+                        redirect(base_url('admin/students/'.$id));
+                    }
+                }
+            }
+            
+        }
+
+        $this->load->view('students/edit-student', $data);
+    }
+
+    public function delete_student($id){
+        $res = $this->admin_model->delete_user(['id' => $id]);
+        if($res){
+            $this->session->set_flashdata('success', 'User deleted successfully');
+            redirect(base_url('admin/students'));
+            
+        }else{
+            $this->session->set_flashdata('errors', 'Something went wrong!');
+            redirect(base_url('admin/students'));
+        }
     }
 
 
@@ -467,6 +614,17 @@ class Admin extends CI_Controller{
 
 
     // ==================== Classes section ======================
+
+    public function get_subjects(){
+        $class_id = $this->input->post('class_id');
+
+        $subjects = $this->admin_model->get_subjects(['class_id' => $class_id]);
+        if($subjects){
+            ajax_response(true, $subjects, 'Data found successfully');
+        }else{
+            ajax_response(false, [], 'Data not found!');
+        }
+    }
 
 }
 

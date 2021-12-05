@@ -1,4 +1,4 @@
-
+    <?php $user = get_user_details(); ?>
     <!-- Page Wrapper -->
     <div id="wrapper">
 
@@ -6,29 +6,20 @@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-                <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="fas fa-laugh-wink"></i>
-                </div>
-                <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="<?= base_url() ?>">
+                <div class="sidebar-brand-text mx-3">Student Information System</div>
             </a>
 
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
 
             <!-- Nav Item - Dashboard -->
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="<?= base_url('admin/home') ?>">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
-
-            <!-- Nav Item - Dashboard -->
-            <li class="nav-item active">
-                <a class="nav-link" href="<?= base_url('admin/about') ?>">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>About</span></a>
-            </li>
+            <?php if($user->role == ADMIN): ?>
             <li class="nav-item">
                 <a class="nav-link" href="<?= base_url('admin/approval_requests') ?>">
                     <i class="fas fa-fw fa-table"></i>
@@ -102,6 +93,22 @@
                     </div>
                 </div>
             </li>
+            <?php endif; ?>
+
+            <?php if($user->role == TEACHER): ?>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#Subjects"
+                        aria-expanded="true" aria-controls="Subjects">
+                        <i class="fas fa-fw fa-cog"></i>
+                        <span>Subjects</span>
+                    </a>
+                    <div id="Subjects" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a class="collapse-item" href="<?= base_url('teacher/allocated_subjects') ?>">Allocated Subjects</a>
+                        </div>
+                    </div>
+                </li>
+            <?php endif; ?>
 
 
 

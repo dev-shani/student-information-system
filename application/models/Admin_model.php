@@ -16,10 +16,43 @@ class Admin_model extends CI_Model{
     function add_user($data){
         $res = $this->db->insert('users', $data);
         if($res){
-            return true;
+            return $this->db->insert_id();
         }else{
             return false;
         }
+    }
+
+    function insert_allocated_subject($data){
+        $res = $this->db->insert('allocated_subjects', $data);
+        if($res){
+            return $this->db->insert_id();
+        }else{
+            return false;
+        }
+    }
+    
+    function add_student_class($data){
+        $res = $this->db->insert('student_class', $data);
+        if($res){
+            return $this->db->insert_id();
+        }else{
+            return false;
+        }
+    }
+
+
+    function get_student_class($where){
+        $res = $this->db->get_where('student_class', $where);
+        if($res->num_rows() > 0){
+            return $res->result();
+        }else{
+            return false;
+        }
+    }
+
+    function update_student_class($data, $where){
+        $res = $this->db->update('student_class', $data, $where);
+        return ($res ? true : false);
     }
 
     function get_users($where = false){
@@ -43,6 +76,7 @@ class Admin_model extends CI_Model{
         $res = $this->db->update('users', $data, $where);
         return ($res ? true : false);
     }
+    
     
     
     function update_subject($data, $where){

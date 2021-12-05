@@ -3,12 +3,12 @@
     $this->load->view('inc/sidebar');
 ?>
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">Students</h1>
+                    <h1 class="h3 mb-2 text-gray-800">Subjects</h1>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Students</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">Subjects</h6>
                         </div>
                         <div class="card-body">
                         <?php if($this->session->flashdata('errors')){ ?>
@@ -20,19 +20,18 @@
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th>Name</th>
-                                            <th>Subjects Code</th>
+                                            <th>Subject Name</th>
+                                            <th>Class</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php if($students): foreach($students as $k => $v): ?>
+                                        <?php if($subjects): foreach($subjects as $k => $v): ?>
                                             <tr>
-                                                <td><?= $v->first_name ?> <?= $v->last_name ?></td>
-                                                <td><?= $v->role ?></td>
+                                                <td><?= $v->subject ?></td>
+                                                <td><?= $v->class ?></td>
                                                 <td>
-                                                    <a class='text-danger' href="<?= base_url("admin/delete_student/{$v->id}") ?>"><i class="fa fa-trash"></i></a>
-                                                    <a class='text-primary' href="<?= base_url("admin/edit_student/{$v->id}") ?>"><i class="fa fa-edit"></i></a>
+                                                    <a class='text-primary' href="<?= base_url("teacher/subject_details/{$v->id}") ?>"><i class="fa fa-info"></i></a>
                                                 </td>
                                             </tr>
                                         <?php endforeach; endif; ?>
