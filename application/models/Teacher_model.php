@@ -10,6 +10,15 @@ class Teacher_model extends CI_Model{
             return false;
         }
     }
+
+    public function insert_timetable($data){
+        $res = $this->db->insert('timetables', $data);
+        if($res){
+            return true;
+        }else{
+            return false;
+        }
+    }
     
     public function get_class_students($where){
         $res = $this->db->get_where('student_class', $where);

@@ -84,21 +84,22 @@ class Admin extends CI_Controller{
     }
 
     public function signup(){
-        $subjects = $this->admin_model->get_subjects();
-        if($subjects){
-            $data['subjects'] = $subjects;
-        }else{
-            $data['subjects'] = '';
-        }
+
+        $classes = $this->admin_model->get_classes();
+        $data['classes'] = $classes ? $classes : '';
 
 
         if($this->input->post()){
+            // preview($this->input->post());
             $first_name = $this->input->post('first_name');
             $last_name = $this->input->post('last_name');
             $email = $this->input->post('email');
             $address = $this->input->post('address');
             $role = $this->input->post('role');
-            $selected_subjects = $this->input->post('selected_subjects');
+            if($role == STUDENT){
+                $class_id = $this->input->post('class_id');
+                $subjects = $this->input->post('subjects');
+            }
 
             $user_data = [
                 'first_name' => $first_name,
@@ -109,8 +110,29 @@ class Admin extends CI_Controller{
                 'status' => NOT_APPROVED,
             ];
 
-            $res = $this->admin_model->add_user($user_data);
-            if($res){
+
+            $user_id = $this->admin_model->add_user($user_data);
+            if($user_id){
+                if($role == STUDENT){
+                    if($subjects){
+                        foreach($subjects as $k => $v){
+                            $temp_data = [
+                                'class_id' => $class_id,
+                                'subject_id' => $v,
+                                'student_id' => $user_id
+                            ];
+
+                            $this->admin_model->add_student_subject($temp_data);
+                        }
+
+                        $class_data = [
+                            'class_id' => $class_id,
+                            'student_id' => $user_id
+                        ];
+
+                        $this->admin_model->add_student_class($class_data);
+                    }
+                }
                 $this->session->set_flashdata('success', 'Application submitted successfully for approval');
                 redirect(base_url('admin/signup'));
             }else{

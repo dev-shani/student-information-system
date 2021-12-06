@@ -108,6 +108,19 @@
                         </div>
                     </div>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#TimeTable"
+                        aria-expanded="true" aria-controls="TimeTable">
+                        <i class="fas fa-fw fa-cog"></i>
+                        <span>TimeTable</span>
+                    </a>
+                    <div id="TimeTable" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a class="collapse-item" href="<?= base_url('teacher/set_timetable') ?>">Set TimeTable</a>
+                            <a class="collapse-item" href="<?= base_url('teacher/timetables') ?>">TimeTables</a>
+                        </div>
+                    </div>
+                </li>
             <?php endif; ?>
 
 

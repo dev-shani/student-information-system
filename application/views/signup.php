@@ -19,7 +19,7 @@
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link href="<?= base_url('assets/css/sb-admin-2.min.css')?>" rel="stylesheet">
+    <link href="<?= base_url('assets/css/sb-admin-2.css')?>" rel="stylesheet">
 
 </head>
 
@@ -72,25 +72,36 @@
                                         placeholder="Your Address">
                                 </div>
                                 <div class="form-group">
-                                    <select name="role" id="" class="form-control">
+                                    <select name="role" id="role" class="form-control">
                                         <option value="">Choose option...</option>
                                         <option value="<?= STUDENT ?>">Student</option>
                                         <option value="<?= TEACHER ?>">Teacher</option>
                                     </select>
                                 </div>
-                                <div class="form-group">
-                                    <?php if($subjects): foreach($subjects as $k => $v): ?>
-                                    <input type="checkbox" name="selected_subjects[]" value="<?= $v->id ?>"><label><?= $v->subject_name ?></label>
-                                    <?php endforeach; endif; ?>
+                                <div class="" id="student_info">
+                                    <!-- Form Group (username)-->
+                                    <div class="form-group">
+                                        <label class="small mb-1" for="inputid">Class</label>
+                                        <select name="class_id" id="class_id" class="form-control">
+                                            <option value="">Choose class...</option>
+                                            <?php if($classes): foreach($classes as $k => $v): ?>
+                                                <option value="<?= $v->id ?>"><?= $v->class_name ?></option>
+                                            <?php endforeach; endif; ?>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="small mb-1" for="inputid">Subject</label>
+                                        <div id="subject_box">
+
+                                        </div>
+                                    </div>
                                 </div>
                                 <input type="submit" class="btn btn-primary btn-user btn-block" value="Register Account">
                             </form>
                             <hr>
                             <div class="text-center">
-                                <a class="small" href="forgot-password.html">Forgot Password?</a>
-                            </div>
-                            <div class="text-center">
-                                <a class="small" href="login.html">Already have an account? Login!</a>
+                                <a class="small" href="<?= base_url('admin/login') ?>">Already have an account? Login!</a>
                             </div>
                         </div>
                     </div>
@@ -111,5 +122,42 @@
     <script src="<?= base_url('assets/js/sb-admin-2.min.js')?>"></script>
 
 </body>
+
+<script>
+    $(document).ready(function(){
+
+        $(document).on('change', '#class_id', function(){
+            let classId = $(this).val();
+
+            $.ajax({
+                url : `<?= base_url('admin/get_subjects') ?>`,
+                method: 'POST',
+                data: {class_id : classId},
+                success: function(response){
+                    res = JSON.parse(response);
+                    subjects = res.data;
+                    html = ``;
+                    for(let i=0; i< subjects.length; i++){
+                        html += `<input class="mr-2" type="checkbox" name="subjects[]" value=${subjects[i].id}><label class="mr-2">${subjects[i].subject_name}</label>`;
+                    }
+                    $('#subject_box').empty();
+                    $('#subject_box').append(html);
+                },
+                error: function(err){
+                    console.log(err);
+                }
+            })
+        })
+
+        $(document).on('change', '#role', function(){
+            if($(this).val() == <?= STUDENT ?>){
+                $('#student_info').show();
+            }else{
+                $('#student_info').hide();
+            }
+        })
+
+    })
+</script>
 
 </html>

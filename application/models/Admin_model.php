@@ -94,6 +94,15 @@ class Admin_model extends CI_Model{
         }
     }
 
+    function add_student_subject($data){
+        $res = $this->db->insert('student_subject', $data);
+        if($res){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     function delete_subject($where){
         $res = $this->db->delete('subjects', $where);
         return ($res ? true : false);

@@ -48,4 +48,45 @@ class Teacher extends CI_Controller{
         $this->load->view('subjects/subject_details', $data);
     }
 
+    public function set_timetable(){
+        $user = get_user_details();
+        $classes = $this->admin_model->get_classes();
+        $data['classes'] = $classes ? $classes : '';
+        $errors = 0;
+        if($this->input->post()){
+            $class_id = $this->input->post('class_id');
+            $timetable = $this->input->post('timetable');
+            if($timetable){
+                foreach($timetable as $k => $v){
+                    $v = (object) $v;
+                    $tt_data = [
+                        'teacher_id' => $user->id,
+                        'class_id' => $class_id,
+                        'subject_id' => $v->subject_id,
+                        'time_from' => $v->time_from,
+                        'time_to' => $v->time_to,
+                        'status' => NOT_APPROVED
+                    ];
+
+                    $res = $this->teacher_model->insert_timetable($tt_data);
+                    if(!$res){
+                        $errors++;
+                    }
+                }
+            }
+
+            if(!$errors){
+                $this->session->set_flashdata('success', 'TimeTable inserted successfully');
+                redirect(base_url('teacher/set_timetable'));
+            }else{
+                $this->session->set_flashdata('errors', 'Something went wrong!');
+                redirect(base_url('teacher/set_timetable'));
+            }
+        }
+        $this->load->view('timetables/set-timetable', $data);
+    }
+
+    public function timetables(){
+        $this->load->view('timetables/timetable-listing');
+    }
 }
