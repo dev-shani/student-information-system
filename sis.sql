@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 06, 2021 at 08:27 PM
+-- Generation Time: Dec 07, 2021 at 07:36 AM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 7.4.25
 
@@ -150,8 +150,8 @@ CREATE TABLE `timetables` (
 --
 
 INSERT INTO `timetables` (`id`, `teacher_id`, `class_id`, `subject_id`, `time_from`, `time_to`, `status`, `created_at`) VALUES
-(1, 3, 4, 4, '00:00:00', '00:00:00', 0, '2021-12-06 19:15:45'),
-(2, 3, 4, 4, '04:17:00', '05:17:00', 0, '2021-12-06 19:17:11');
+(2, 3, 4, 4, '04:17:00', '05:17:00', 0, '2021-12-06 19:17:11'),
+(3, 3, 4, 4, '00:54:00', '05:54:00', 0, '2021-12-07 03:54:17');
 
 -- --------------------------------------------------------
 
@@ -273,7 +273,7 @@ ALTER TABLE `subjects`
 -- AUTO_INCREMENT for table `timetables`
 --
 ALTER TABLE `timetables`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `users`
