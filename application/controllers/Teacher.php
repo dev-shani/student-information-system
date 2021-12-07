@@ -50,7 +50,15 @@ class Teacher extends CI_Controller{
 
     public function set_timetable(){
         $user = get_user_details();
-        $classes = $this->admin_model->get_classes();
+        $allocated_classes = $this->teacher_model->get_allocated_subject(['teacher_id' => $user->id]);
+        // preview($allocated_classes);
+        if($allocated_classes){
+            foreach($allocated_classes as $k => $v){
+                $class = $this->admin_model->get_classes(['id' => $v->class_id]);
+                $classes[] = $class ? $class[0] : '';
+            }
+
+        }
         $data['classes'] = $classes ? $classes : '';
         $errors = 0;
         if($this->input->post()){
@@ -87,6 +95,73 @@ class Teacher extends CI_Controller{
     }
 
     public function timetables(){
-        $this->load->view('timetables/timetable-listing');
+        $user = get_user_details();
+        $timetable = $this->teacher_model->get_timetables(['teacher_id' => $user->id]);
+        $final_table = [];
+        if($timetable){
+            foreach($timetable as $k => $v){
+                $class = $this->admin_model->get_classes(['id' => $v->class_id]);
+                $v->class_detail = $class ? $class[0] : '';
+                $subject = $this->admin_model->get_subjects(['id' => $v->subject_id]);
+                $v->subject_detail = $subject ? $subject[0] : '';
+                $final_table[] = $v;
+            }
+        }
+        $data['timetables'] = $final_table ? $final_table : '';
+        $this->load->view('timetables/timetable-listing', $data);
+    }
+
+    public function delete_timetable($id){
+        $res = $this->teacher_model->delete_timetable(['id' => $id]);
+        if($res){
+            $this->session->set_flashdata('success', 'Timetable deleted successfully');
+            redirect(base_url('teacher/timetables'));
+            
+        }else{
+            $this->session->set_flashdata('errors', 'Something went wrong!');
+            redirect(base_url('teacher/timetables'));
+        }
+    }
+
+    public function update_timetable($id){
+        $timetable = $this->teacher_model->get_timetables(['id' => $id]);
+        $final_table = [];
+        if($timetable){
+            foreach($timetable as $k => $v){
+                $class = $this->admin_model->get_classes(['id' => $v->class_id]);
+                $v->class_detail = $class ? $class[0] : '';
+                $subject = $this->admin_model->get_subjects(['id' => $v->subject_id]);
+                $v->subject_detail = $subject ? $subject[0] : '';
+                $final_table[] = $v;
+            }
+        }
+        // preview($final_table);
+        $data['time_table'] = $final_table[0];
+
+
+        if($this->input->post()){
+            // preview($this->input->post());
+            $time_from = $this->input->post('time_from');
+            $time_to = $this->input->post('time_to');
+
+            $time_data = [
+                'time_from' => $time_from,
+                'time_to' => $time_to
+            ];
+
+            $res = $this->teacher_model->update_timetable($time_data, ['id' => $id]);
+            if($res){
+                $this->session->set_flashdata('success', 'Timetable updated successfully');
+                redirect(base_url('teacher/update_timetable/'.$id));
+                
+            }else{
+                $this->session->set_flashdata('errors', 'Something went wrong!');
+                redirect(base_url('teacher/update_timetable/'.$id));
+            }
+        }
+
+
+
+        $this->load->view('timetables/edit-timetable', $data);
     }
 }

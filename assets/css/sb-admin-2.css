@@ -9648,7 +9648,7 @@ a.text-light:hover, a.text-light:focus {
 }
 
 .text-dark {
-  color: #5a5c69 !important;
+  color: #000 !important;
 }
 
 a.text-dark:hover, a.text-dark:focus {

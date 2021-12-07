@@ -21,18 +21,24 @@
                                     <thead>
                                         <tr>
                                             <th>Subject Name</th>
-                                            <th>Subjects Code</th>
+                                            <th>Class</th>
+                                            <th>From</th>
+                                            <th>To</th>
+                                            <th>Status</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php if($subjects): foreach($subjects as $k => $v): ?>
+                                        <?php if($timetables): foreach($timetables as $k => $v): ?>
                                             <tr>
-                                                <td><?= $v->subject_name ?></td>
-                                                <td><?= $v->subject_code ?></td>
+                                                <td><?= $v->class_detail ? $v->subject_detail->subject_name : 'N/A' ?></td>
+                                                <td><?= $v->class_detail ? $v->class_detail->class_name : 'N/A' ?></td>
+                                                <td><?= date('H:i', strtotime($v->time_from)) ?></td>
+                                                <td><?= date('H:i', strtotime($v->time_to)) ?></td>
+                                                <td><?= $v->status == APPROVED ? '<span class="text-success">Approved</span>' :'<span class="text-danger">Not Approved</span>'; ?></td>
                                                 <td>
-                                                    <a class='text-danger' href="<?= base_url("admin/delete_subject/{$v->id}") ?>"><i class="fa fa-trash"></i></a>
-                                                    <a class='text-primary' href="<?= base_url("admin/edit_subject/{$v->id}") ?>"><i class="fa fa-edit"></i></a>
+                                                    <a class='text-danger' href="<?= base_url("teacher/delete_timetable/{$v->id}") ?>"><i class="fa fa-trash"></i></a>
+                                                    <a class='text-primary' href="<?= base_url("teacher/update_timetable/{$v->id}") ?>"><i class="fa fa-edit"></i></a>
                                                 </td>
                                             </tr>
                                         <?php endforeach; endif; ?>
