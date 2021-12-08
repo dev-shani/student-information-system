@@ -79,6 +79,11 @@ class Admin_model extends CI_Model{
     
     
     
+    function update_timetable($data, $where){
+        $res = $this->db->update('timetables', $data, $where);
+        return ($res ? true : false);
+    }
+
     function update_subject($data, $where){
         $res = $this->db->update('subjects', $data, $where);
         return ($res ? true : false);

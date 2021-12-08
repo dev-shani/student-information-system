@@ -6,30 +6,76 @@ class Admin extends CI_Controller{
         parent::__construct();
         $this->load->helper('common_helper');
         $this->load->model('admin_model');
+        $this->load->model('teacher_model');
     }
 
     public function home(){
         if(!$this->session->userdata('is_logged_in')){
             redirect(base_url('admin/login'));
         }
+        $user = get_user_details();
+        $data['user'] = $user;
+        if($user->role == ADMIN):
+            $approval_requests = $this->admin_model->get_users(['status' => NOT_APPROVED]);
+            $data['approval_requests'] = $approval_requests ? count($approval_requests) : '';
+            $students = $this->admin_model->get_users(['role' => STUDENT]);
+            $data['students'] = $students ? count($students)  : '';
+            $teachers = $this->admin_model->get_users(['role', TEACHER]);
+            $data['teachers'] = $teachers ? count($teachers) : '';
+            $timetable_approval_requests = $this->teacher_model->get_timetables(['status' => NOT_APPROVED]);
+            $data['timetable_requests'] = $timetable_approval_requests ? count($timetable_approval_requests) : '';
+        endif;
+
+
+        if($user->role == TEACHER): 
+            $allocated_subjects = $this->teacher_model->get_allocated_subject(['teacher_id' => $user->id]);
+            $data['allocated_subjects'] = $allocated_subjects ? count($allocated_subjects) : '';
+        endif;
+
         $this->load->view('inc/header');
         $this->load->view('inc/sidebar');
-        $this->load->view('admin/home');
+        $this->load->view('admin/home', $data);
         $this->load->view('inc/footer');
     }
 
-    public function about(){
-        $this->load->view('inc/header');
-        $this->load->view('inc/sidebar');
-        $this->load->view('admin/about');
-        $this->load->view('inc/footer');
-    }
+
 
     public function not_found(){
         $this->load->view('inc/header');
         $this->load->view('inc/sidebar');
         $this->load->view('admin/404');
         $this->load->view('inc/footer');
+    }
+
+
+    public function timetable_requests(){
+        $timetable_approval_requests = $this->teacher_model->get_timetables(['status' => NOT_APPROVED]);
+        $final_table = [];
+        if($timetable_approval_requests){
+            foreach($timetable_approval_requests as $k => $v){
+                $class = $this->admin_model->get_classes(['id' => $v->class_id]);
+                $v->class_detail = $class ? $class[0] : '';
+                $subject = $this->admin_model->get_subjects(['id' => $v->subject_id]);
+                $v->subject_detail = $subject ? $subject[0] : '';
+                $final_table[] = $v;
+            }
+        }
+        // preview($final_table);
+        $data['timetables'] = $final_table ? $final_table : '';
+        
+        $this->load->view('timetables/timetable_requests', $data);
+    }
+
+    public function approve_timetable($id){
+        $res = $this->admin_model->update_timetable(['status' => APPROVED], ['id' => $id]);
+        if($res){
+            $this->session->set_flashdata('success', 'TimeTable has been approved successfully');
+            redirect(base_url('admin/timetable_requests'));
+            
+        }else{
+            $this->session->set_flashdata('errors', 'Something went wrong!');
+            redirect(base_url('admin/timetable_requests'));
+        }
     }
 
 

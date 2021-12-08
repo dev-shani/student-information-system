@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 07, 2021 at 07:36 AM
+-- Generation Time: Dec 08, 2021 at 07:20 PM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 7.4.25
 
@@ -103,7 +103,7 @@ CREATE TABLE `student_subject` (
 --
 
 INSERT INTO `student_subject` (`id`, `student_id`, `subject_id`, `class_id`) VALUES
-(1, 10, 3, 2);
+(1, 9, 3, 2);
 
 -- --------------------------------------------------------
 
@@ -150,7 +150,7 @@ CREATE TABLE `timetables` (
 --
 
 INSERT INTO `timetables` (`id`, `teacher_id`, `class_id`, `subject_id`, `time_from`, `time_to`, `status`, `created_at`) VALUES
-(2, 3, 4, 4, '04:17:00', '05:17:00', 0, '2021-12-06 19:17:11'),
+(2, 3, 4, 1, '04:17:00', '05:17:00', 1, '2021-12-06 19:17:11'),
 (3, 3, 4, 4, '00:54:00', '05:54:00', 0, '2021-12-07 03:54:17');
 
 -- --------------------------------------------------------
@@ -181,11 +181,11 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `first_name`, `last_name`, `address`, `status`, `role`, `email`, `password`, `created_at`, `city`, `phone`, `salary`, `cnic`, `fee`) VALUES
-(1, '', '', '', 1, 0, 'shani@gmail.com', '827ccb0eea8a706c4c34a16891f84e7b', '2021-12-02 06:17:23', '', '', '', '', ''),
+(1, '', '', '', 1, 0, 'admin@gmail.com', '827ccb0eea8a706c4c34a16891f84e7b', '2021-12-02 06:17:23', '', '', '', '', ''),
 (2, 'Aseer', 'Ali', 'MCB 1/1435 Moh. Line park st# govt. girls high school No. 2', 1, 2, 'shani1825@hotmail.com', '', '2021-12-03 06:10:31', '', '', '', '', ''),
-(3, 'Ahmed', 'Ali', 'MCB 1/1435 Moh. Line park st# govt. girls high school No. 2', 1, 1, 'shani1825@hotmail.com', '827ccb0eea8a706c4c34a16891f84e7b', '2021-12-03 06:21:51', 'Chakwal', '33256485', '433333', '2324234234234234', ''),
+(3, 'Ahmed', 'Ali', 'MCB 1/1435 Moh. Line park st# govt. girls high school No. 2', 1, 1, 'teacher@gmail.com', '827ccb0eea8a706c4c34a16891f84e7b', '2021-12-03 06:21:51', 'Chakwal', '33256485', '433333', '2324234234234234', ''),
 (5, 'Zain', 'Ali', '', 1, 1, 'shani1825@hotmail.com', '827ccb0eea8a706c4c34a16891f84e7b', '2021-12-05 11:44:51', 'Chakwal', '03085032607', '', '', ''),
-(9, 'Hassan', 'Ali', '', 1, 2, '', '827ccb0eea8a706c4c34a16891f84e7b', '2021-12-05 17:12:00', 'Chakwal', '03085032607', '', '', '2000'),
+(9, 'Hassan', 'Ali', '', 1, 2, 'student@gmail.com', '827ccb0eea8a706c4c34a16891f84e7b', '2021-12-05 17:12:00', 'Chakwal', '03085032607', '', '', '2000'),
 (10, '', '', '', 0, 2, '', '', '2021-12-06 18:05:55', '', '', '', '', ''),
 (11, 'Zeeshan', 'Ali', 'MCB 1/1435 Moh. Line park st# govt. girls high school No. 2', 0, 1, 'shani1825@hotmail.com', '', '2021-12-06 18:07:55', '', '', '', '', '');
 

@@ -11283,3 +11283,18 @@ body.sidebar-toggled footer.sticky-footer {
 #student_info{
   display: none;
 }
+
+
+.dt-buttons {
+  text-align: right;
+}
+
+.dt-button {
+  background: #4169e1;
+  border: none;
+  color: #fff;
+  padding: 5px 20px;
+  border-radius: 5px;
+  margin: 0px 5px;
+  box-shadow: 0px 0px 5px #000;
+}

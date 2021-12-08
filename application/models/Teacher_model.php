@@ -28,6 +28,16 @@ class Teacher_model extends CI_Model{
             return false;
         }
     }
+    public function get_student_subjects($where){
+        $res = $this->db->get_where('student_subject', $where);
+        if($res->num_rows() > 0){
+            return $res->result();
+        }else{
+            return false;
+        }
+    }
+
+    
 
 
     public function get_timetables($where = false){
