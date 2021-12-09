@@ -78,6 +78,7 @@
                                         <option value="">Choose option...</option>
                                         <option value="<?= STUDENT ?>">Student</option>
                                         <option value="<?= TEACHER ?>">Teacher</option>
+                                        <option value="<?= PARENT ?>">Parent</option>
                                     </select>
                                 </div>
                                 <div class="" id="student_info">

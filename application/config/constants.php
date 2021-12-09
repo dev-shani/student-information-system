@@ -101,3 +101,8 @@ define('PARENT', 3);
 
 define('APPROVED', 1);
 define('NOT_APPROVED', 0);
+
+// Attendence
+define("ABSENT", 0);
+define("PRESENT", 1);
+define("LEAVE", 2);

@@ -126,6 +126,19 @@
                         </div>
                     </div>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#Attendance"
+                        aria-expanded="true" aria-controls="Attendance">
+                        <i class="fas fa-fw fa-cog"></i>
+                        <span>Attendance</span>
+                    </a>
+                    <div id="Attendance" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a class="collapse-item" href="<?= base_url('teacher/set_attendence') ?>">Set Attendance</a>
+                            <a class="collapse-item" href="<?= base_url('teacher/attendence') ?>">Attendance</a>
+                        </div>
+                    </div>
+                </li>
             <?php endif; ?>
             
             <?php if($user->role == STUDENT): ?>

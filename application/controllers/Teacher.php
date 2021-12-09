@@ -164,4 +164,44 @@ class Teacher extends CI_Controller{
 
         $this->load->view('timetables/edit-timetable', $data);
     }
+
+
+    public function attendence(){
+        
+        $this->load->view('attendence/attendence_list');
+    }
+
+    public function set_attendence(){
+        $user = get_user_details();
+        $subjects = $this->teacher_model->get_allocated_subject(['teacher_id' => $user->id]);
+        $subject_arr = [];
+        $student_ids = [];
+        $students = [];
+        if($subjects){
+            foreach($subjects as $k => $v){
+                $subject_arr[] = $v->subject_id;
+            }
+        }
+
+        if($subject_arr){
+            foreach($subject_arr as $k => $v){
+                $temp = $this->teacher_model->get_student_subjects(['subject_id' => $v]);
+                $student_ids[] = $temp ? $temp[0]->student_id : '';
+            }
+        }
+        if($student_ids){
+            foreach($student_ids as $k => $v){
+                $temp = $this->admin_model->get_users(['id' => $v]);
+                $students[] = $temp ? $temp[0] : '';
+            }
+        }
+        $data['students'] = $students ? $students : '';
+
+
+        if($this->input->post()){
+            preview($_POST);
+        }
+        
+        $this->load->view('attendence/set-attendence', $data);
+    }
 }
