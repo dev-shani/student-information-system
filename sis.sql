@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 08, 2021 at 07:20 PM
+-- Generation Time: Dec 09, 2021 at 08:59 AM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 7.4.25
 
@@ -39,7 +39,22 @@ CREATE TABLE `allocated_subjects` (
 --
 
 INSERT INTO `allocated_subjects` (`id`, `teacher_id`, `class_id`, `subject_id`) VALUES
-(1, 3, 4, 4);
+(1, 3, 4, 3);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `attendance`
+--
+
+CREATE TABLE `attendance` (
+  `id` int(11) NOT NULL,
+  `student_id` int(11) NOT NULL,
+  `teacher_id` int(11) NOT NULL,
+  `attendence` tinyint(4) NOT NULL,
+  `date` date NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -103,7 +118,8 @@ CREATE TABLE `student_subject` (
 --
 
 INSERT INTO `student_subject` (`id`, `student_id`, `subject_id`, `class_id`) VALUES
-(1, 9, 3, 2);
+(1, 9, 3, 2),
+(2, 10, 3, 2);
 
 -- --------------------------------------------------------
 
@@ -186,7 +202,7 @@ INSERT INTO `users` (`id`, `first_name`, `last_name`, `address`, `status`, `role
 (3, 'Ahmed', 'Ali', 'MCB 1/1435 Moh. Line park st# govt. girls high school No. 2', 1, 1, 'teacher@gmail.com', '827ccb0eea8a706c4c34a16891f84e7b', '2021-12-03 06:21:51', 'Chakwal', '33256485', '433333', '2324234234234234', ''),
 (5, 'Zain', 'Ali', '', 1, 1, 'shani1825@hotmail.com', '827ccb0eea8a706c4c34a16891f84e7b', '2021-12-05 11:44:51', 'Chakwal', '03085032607', '', '', ''),
 (9, 'Hassan', 'Ali', '', 1, 2, 'student@gmail.com', '827ccb0eea8a706c4c34a16891f84e7b', '2021-12-05 17:12:00', 'Chakwal', '03085032607', '', '', '2000'),
-(10, '', '', '', 0, 2, '', '', '2021-12-06 18:05:55', '', '', '', '', ''),
+(10, 'ali', '', '', 0, 2, '', '', '2021-12-06 18:05:55', '', '', '', '', ''),
 (11, 'Zeeshan', 'Ali', 'MCB 1/1435 Moh. Line park st# govt. girls high school No. 2', 0, 1, 'shani1825@hotmail.com', '', '2021-12-06 18:07:55', '', '', '', '', '');
 
 --
@@ -197,6 +213,12 @@ INSERT INTO `users` (`id`, `first_name`, `last_name`, `address`, `status`, `role
 -- Indexes for table `allocated_subjects`
 --
 ALTER TABLE `allocated_subjects`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `attendance`
+--
+ALTER TABLE `attendance`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -246,6 +268,12 @@ ALTER TABLE `allocated_subjects`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `attendance`
+--
+ALTER TABLE `attendance`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `classes`
 --
 ALTER TABLE `classes`
@@ -261,7 +289,7 @@ ALTER TABLE `student_class`
 -- AUTO_INCREMENT for table `student_subject`
 --
 ALTER TABLE `student_subject`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `subjects`
