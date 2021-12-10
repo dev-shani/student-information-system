@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 09, 2021 at 08:59 AM
+-- Generation Time: Dec 10, 2021 at 07:59 AM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 7.4.25
 
@@ -56,6 +56,14 @@ CREATE TABLE `attendance` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `attendance`
+--
+
+INSERT INTO `attendance` (`id`, `student_id`, `teacher_id`, `attendence`, `date`, `created_at`) VALUES
+(1, 9, 3, 1, '2021-12-21', '2021-12-10 06:37:08'),
+(2, 9, 3, 0, '2021-12-07', '2021-12-10 06:49:27');
+
 -- --------------------------------------------------------
 
 --
@@ -96,8 +104,8 @@ CREATE TABLE `student_class` (
 
 INSERT INTO `student_class` (`id`, `student_id`, `class_id`) VALUES
 (1, 9, 4),
-(2, 8, 1),
-(3, 9, 5),
+(2, 8, 4),
+(3, 9, 4),
 (4, 10, 2);
 
 -- --------------------------------------------------------
@@ -271,7 +279,7 @@ ALTER TABLE `allocated_subjects`
 -- AUTO_INCREMENT for table `attendance`
 --
 ALTER TABLE `attendance`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `classes`
