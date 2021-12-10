@@ -167,8 +167,16 @@ class Teacher extends CI_Controller{
 
 
     public function attendence(){
-        
-        $this->load->view('attendence/attendence_list');
+        $user = get_user_details();
+        $attendence = $this->db->get_where('attendance', ['teacher_id' => $user->id])->result();
+        if($attendence){
+            foreach($attendence as $k => $v){
+                $st_data = $this->admin_model->get_users(['id' => $v->student_id]);
+                $v->student_data = $st_data ? $st_data[0] : '';
+            }
+        }
+        $data['attendence'] = $attendence ? $attendence : '';
+        $this->load->view('attendence/attendence_list', $data);
     }
 
     public function set_attendence(){
@@ -199,7 +207,37 @@ class Teacher extends CI_Controller{
 
 
         if($this->input->post()){
-            preview($_POST);
+            $user = get_user_details();
+            $date = $this->input->post('date');
+            $attendence = $this->input->post('attendence');
+            $res = true;
+            if($attendence){
+                foreach($attendence as $k => $v){
+                    print_r($v);
+                    $temp = [
+                        'teacher_id' => $user->id,
+                        'date' => $date,
+                        'student_id' => $v['student_id'],
+                        'attendence' => $v['attendence']
+                    ];
+
+                    $res = $this->db->insert('attendance', $temp);
+                    if(!$res){
+                        $res = false;
+                    }
+                }
+            }
+
+
+            if($res){
+                $this->session->set_flashdata('success', 'Attendance marked successfully');
+                redirect(base_url('teacher/attendence/'));
+                
+            }else{
+                $this->session->set_flashdata('errors', 'Something went wrong!');
+                redirect(base_url('teacher/attendence/'.$id));
+            }
+
         }
         
         $this->load->view('attendence/set-attendence', $data);

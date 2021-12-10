@@ -38,13 +38,13 @@
                                     <th><?= $v->first_name ?></th>
                                     <th><?= $v->email ?></th>
                                     <th>
-                                        <select name="attendence" id="" class="form-control">
+                                        <select name="attendence[<?= $i ?>][attendence]" id="" class="form-control">
                                             <option value="">Choose..</option>
                                             <option value="<?= PRESENT ?>">Present</option>
                                             <option value="<?= ABSENT ?>">Absent</option>
                                             <option value="<?= LEAVE ?>">Leave</option>
                                         </select>
-                                        <input type="hidden" name="student_id" value="<?= $v->id ?>">
+                                        <input type="hidden" name="attendence[<?= $i ?>][student_id]" value="<?= $v->id ?>">
                                     </th>
                                 </tr>
                             <?php $i++; endforeach; endif; ?>
