@@ -29,4 +29,12 @@ class Student extends CI_Controller{
     }
 
 
+    public function attendence(){
+        $user = get_user_details();
+        $attendence = $this->db->get('attendance', ['id' => $user->id])->result();
+        $data['attendence'] = $attendence ? $attendence : '';
+        $this->load->view('attendence/student-attendence', $data);
+    }
+
+
 }
