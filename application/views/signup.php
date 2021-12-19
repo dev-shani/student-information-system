@@ -100,6 +100,25 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <div id="parent_info">
+                                    <div class="form-group">
+                                        <label class="small mb-1" for="inputid">Class</label>
+                                        <select class="student_class form-control" name="class_id" id="class_id" class="form-control">
+                                            <option value="">Choose class...</option>
+                                            <?php if($classes): foreach($classes as $k => $v): ?>
+                                                <option value="<?= $v->id ?>"><?= $v->class_name ?></option>
+                                            <?php endforeach; endif; ?>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="small mb-1" for="inputid">Child</label>
+                                        <select name="student_id" id="student_id" class="form-control">
+                                            <option value="">Choose student...</option>
+                                        </select>
+                                    </div>
+                                </div>
                                 <input type="submit" class="btn btn-primary btn-user btn-block" value="Register Account">
                             </form>
                             <hr>
@@ -155,9 +174,43 @@
         $(document).on('change', '#role', function(){
             if($(this).val() == <?= STUDENT ?>){
                 $('#student_info').show();
+                $('#parent_info').hide();
+            }else if($(this).val() == <?= PARENT ?>){
+
+                $('#student_info').hide();
+                $('#parent_info').show();
+
             }else{
                 $('#student_info').hide();
+                $('#parent_info').hide();
             }
+        })
+
+        $(document).on('change', '.student_class', function(){
+            let classId = $(this).val();
+
+            $.ajax({
+                url : `<?= base_url('admin/get_class_student') ?>`,
+                method: 'POST',
+                data: {class_id : classId},
+                success: function(response){
+                    res = JSON.parse(response);
+                    console.log(res.data);
+                    students = res.data;
+                    html = `<option value="">Choose student...</option>`;
+                    console.log(students.length);
+                    for(let i=0; i< students.length; i++){
+                        if(students[i] != ""){
+                            html += `<option value="${students[i].id}">${students[i].first_name} ${students[i].last_name}</option>`;
+                        }
+                    }
+                    $('#student_id').empty();
+                    $('#student_id').append(html);
+                },
+                error: function(err){
+                    console.log(err);
+                }
+            })
         })
 
     })

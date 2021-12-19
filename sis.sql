@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 10, 2021 at 07:59 AM
+-- Generation Time: Dec 19, 2021 at 05:07 PM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 7.4.25
 
@@ -85,6 +85,52 @@ INSERT INTO `classes` (`id`, `class_name`, `created_at`) VALUES
 (2, '1', '2021-12-05 12:21:57'),
 (4, '2', '2021-12-05 12:22:11'),
 (5, '3', '2021-12-05 12:34:44');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `marks`
+--
+
+CREATE TABLE `marks` (
+  `id` int(11) NOT NULL,
+  `teacher_id` int(11) NOT NULL,
+  `subject_id` int(11) NOT NULL,
+  `student_id` int(11) NOT NULL,
+  `date` date DEFAULT NULL,
+  `total_marks` text NOT NULL,
+  `obtained_marks` text NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `marks`
+--
+
+INSERT INTO `marks` (`id`, `teacher_id`, `subject_id`, `student_id`, `date`, `total_marks`, `obtained_marks`, `created_at`) VALUES
+(1, 3, 3, 9, '2021-12-29', '100', '2', '2021-12-12 19:19:38'),
+(2, 3, 3, 9, '2021-12-16', '2342', '1234', '2021-12-12 19:21:19'),
+(3, 3, 3, 9, '2021-12-21', '100', '50', '2021-12-18 18:14:59');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `parent_student`
+--
+
+CREATE TABLE `parent_student` (
+  `id` int(11) NOT NULL,
+  `parent_id` int(11) NOT NULL,
+  `student_id` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `parent_student`
+--
+
+INSERT INTO `parent_student` (`id`, `parent_id`, `student_id`, `created_at`) VALUES
+(1, 12, 9, '2021-12-19 15:53:45');
 
 -- --------------------------------------------------------
 
@@ -211,7 +257,8 @@ INSERT INTO `users` (`id`, `first_name`, `last_name`, `address`, `status`, `role
 (5, 'Zain', 'Ali', '', 1, 1, 'shani1825@hotmail.com', '827ccb0eea8a706c4c34a16891f84e7b', '2021-12-05 11:44:51', 'Chakwal', '03085032607', '', '', ''),
 (9, 'Hassan', 'Ali', '', 1, 2, 'student@gmail.com', '827ccb0eea8a706c4c34a16891f84e7b', '2021-12-05 17:12:00', 'Chakwal', '03085032607', '', '', '2000'),
 (10, 'ali', '', '', 0, 2, '', '', '2021-12-06 18:05:55', '', '', '', '', ''),
-(11, 'Zeeshan', 'Ali', 'MCB 1/1435 Moh. Line park st# govt. girls high school No. 2', 0, 1, 'shani1825@hotmail.com', '', '2021-12-06 18:07:55', '', '', '', '', '');
+(11, 'Zeeshan', 'Ali', 'MCB 1/1435 Moh. Line park st# govt. girls high school No. 2', 0, 1, 'shani1825@hotmail.com', '', '2021-12-06 18:07:55', '', '', '', '', ''),
+(12, 'Asghar ', 'ali', 'chakwal', 1, 3, 'parent@gmail.com', '827ccb0eea8a706c4c34a16891f84e7b', '2021-12-19 15:53:45', '', '', '', '', '');
 
 --
 -- Indexes for dumped tables
@@ -233,6 +280,18 @@ ALTER TABLE `attendance`
 -- Indexes for table `classes`
 --
 ALTER TABLE `classes`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `marks`
+--
+ALTER TABLE `marks`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `parent_student`
+--
+ALTER TABLE `parent_student`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -288,6 +347,18 @@ ALTER TABLE `classes`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
+-- AUTO_INCREMENT for table `marks`
+--
+ALTER TABLE `marks`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `parent_student`
+--
+ALTER TABLE `parent_student`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `student_class`
 --
 ALTER TABLE `student_class`
@@ -315,7 +386,7 @@ ALTER TABLE `timetables`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

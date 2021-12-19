@@ -141,6 +141,7 @@ class Admin extends CI_Controller{
             $last_name = $this->input->post('last_name');
             $email = $this->input->post('email');
             $address = $this->input->post('address');
+            $password = $this->input->post('password');
             $role = $this->input->post('role');
             if($role == STUDENT){
                 $class_id = $this->input->post('class_id');
@@ -153,6 +154,7 @@ class Admin extends CI_Controller{
                 'email' => $email,
                 'address' => $address,
                 'role' => $role,
+                'password' => md5($password),
                 'status' => NOT_APPROVED,
             ];
 
@@ -178,6 +180,14 @@ class Admin extends CI_Controller{
 
                         $this->admin_model->add_student_class($class_data);
                     }
+                }
+
+                if($role == PARENT){
+                    $rel_data = [
+                        'student_id' => $this->input->post('student_id'),
+                        'parent_id' => $user_id,
+                    ];
+                    $this->db->insert('parent_student', $rel_data);
                 }
                 $this->session->set_flashdata('success', 'Application submitted successfully for approval');
                 redirect(base_url('admin/signup'));
@@ -691,6 +701,26 @@ class Admin extends CI_Controller{
             ajax_response(true, $subjects, 'Data found successfully');
         }else{
             ajax_response(false, [], 'Data not found!');
+        }
+    }
+
+
+    public function get_class_student(){
+        if($this->input->post()){
+            $class_id = $this->input->post('class_id');
+            $student_ids = $this->db->get_where('student_class',['class_id' => $class_id])->result();
+            $students = [];
+            if($student_ids){
+                foreach($student_ids as $k => $v){
+                    $st = $this->db->get_where('users', ['id' => $v->student_id]);
+                    $students[] = $st->num_rows() > 0 ? $st->row() : '';
+                }
+            }
+            if($students){
+                ajax_response(true, $students, 'Data found');
+            }else{
+                ajax_response(false, [], 'No data found');
+            }
         }
     }
 

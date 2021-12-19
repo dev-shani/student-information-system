@@ -180,29 +180,7 @@ class Teacher extends CI_Controller{
     }
 
     public function set_attendence(){
-        $user = get_user_details();
-        $subjects = $this->teacher_model->get_allocated_subject(['teacher_id' => $user->id]);
-        $subject_arr = [];
-        $student_ids = [];
-        $students = [];
-        if($subjects){
-            foreach($subjects as $k => $v){
-                $subject_arr[] = $v->subject_id;
-            }
-        }
-
-        if($subject_arr){
-            foreach($subject_arr as $k => $v){
-                $temp = $this->teacher_model->get_student_subjects(['subject_id' => $v]);
-                $student_ids[] = $temp ? $temp[0]->student_id : '';
-            }
-        }
-        if($student_ids){
-            foreach($student_ids as $k => $v){
-                $temp = $this->admin_model->get_users(['id' => $v]);
-                $students[] = $temp ? $temp[0] : '';
-            }
-        }
+        $students = get_teacher_students();
         $data['students'] = $students ? $students : '';
 
 
@@ -241,5 +219,47 @@ class Teacher extends CI_Controller{
         }
         
         $this->load->view('attendence/set-attendence', $data);
+    }
+
+    public function set_marks(){
+        $students  = get_teacher_students_with_subjects();
+        $data['students'] = $students ? $students : '';
+        
+
+        if($this->input->post()){
+            // preview($this->input->post());
+            $user = get_user_details();
+            $marks = $this->input->post('marks');
+            $res = true;
+            if($marks){
+                foreach($marks as $k => $v){
+                    $v = (object) $v;
+                    $marks_data = [
+                        'date' => $v->date,
+                        'teacher_id' => $user->id,
+                        'subject_id' => $v->subject_id,
+                        'student_id' => $v->student_id,
+                        'total_marks' => $v->total_marks,
+                        'obtained_marks' => $v->obtained_marks
+                    ];
+                    $res = $this->db->insert('marks', $marks_data);
+                    if(!$res){
+                        $res = false;
+                    }
+                }
+            }
+
+            if($res){
+                $this->session->set_flashdata('success', 'Marks added successfully');
+                redirect(base_url('teacher/set_marks/'));
+                
+            }else{
+                $this->session->set_flashdata('errors', 'Something went wrong!');
+                redirect(base_url('teacher/set_marks/'.$id));
+            }
+        }
+
+        $this->load->view('marks/set_marks', $data);
+
     }
 }

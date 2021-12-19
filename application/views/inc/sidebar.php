@@ -139,9 +139,22 @@
                         </div>
                     </div>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#Marks"
+                        aria-expanded="true" aria-controls="Marks">
+                        <i class="fas fa-fw fa-cog"></i>
+                        <span>Marks</span>
+                    </a>
+                    <div id="Marks" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a class="collapse-item" href="<?= base_url('teacher/set_marks') ?>">Set Marks</a>
+                            <a class="collapse-item" href="<?= base_url('teacher/Marks') ?>">Marks</a>
+                        </div>
+                    </div>
+                </li>
             <?php endif; ?>
             
-            <?php if($user->role == STUDENT): ?>
+            <?php if($user->role == STUDENT || $user->role == PARENT): ?>
                 <!-- <li class="nav-item">
                 <a class="nav-link" href="<?= base_url('student/assigned_classes') ?>">
                     <i class="fas fa-fw fa-table"></i>

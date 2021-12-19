@@ -12,6 +12,10 @@ class Student extends CI_Controller{
 
     public function assigned_classes(){
         $user = get_user_details();
+        if($user->role == PARENT){
+            $st_id = $this->db->get_where('parent_student', ['parent_id' => $user->id])->row();
+            $user = $this->db->get_where('users',['id' => $st_id->student_id])->row();
+        }
         $subjects = $this->teacher_model->get_student_subjects(['student_id' => $user->id]);
         // preview($subjects);
         if($subjects){
@@ -31,6 +35,10 @@ class Student extends CI_Controller{
 
     public function attendence(){
         $user = get_user_details();
+        if($user->role == PARENT){
+            $st_id = $this->db->get_where('parent_student', ['parent_id' => $user->id])->row();
+            $user = $this->db->get_where('users',['id' => $st_id->student_id])->row();
+        }
         $attendence = $this->db->get('attendance', ['id' => $user->id])->result();
         $data['attendence'] = $attendence ? $attendence : '';
         $this->load->view('attendence/student-attendence', $data);

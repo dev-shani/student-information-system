@@ -11280,6 +11280,7 @@ body.sidebar-toggled footer.sticky-footer {
   width: 100%;
 }
 
+#parent_info,
 #student_info{
   display: none;
 }
