@@ -262,4 +262,59 @@ class Teacher extends CI_Controller{
         $this->load->view('marks/set_marks', $data);
 
     }
+
+    public function marks(){
+        $user = get_user_details();
+        $ids = $this->teacher_model->get_allocated_subject(['teacher_id' => $user->id]);
+        $subject_class = [];
+        foreach($ids as $k => $v){
+            $subject = $this->admin_model->get_subjects(['id' => $v->subject_id]);
+            $tem_sub = $subject ? $subject[0]->subject_name : '';
+            $class = $this->admin_model->get_classes(['id' => $v->class_id]);
+            $tem_cls = $class ? $class[0]: '';
+            $subject_class[] = (object)[
+                'subject_id' => $v->subject_id,
+                'subject' => $tem_sub,
+                'class' => $tem_cls->class_name,
+                'class_id' => $tem_cls->id,
+            ];
+        }
+        $data['subjects'] = $subject_class;
+        $this->load->view('marks/marks_listing', $data);
+    }
+
+
+    public function get_students(){
+        
+        if($this->input->post()){
+            $subject_id = $this->input->post('subject_id');
+            $student_ids = $this->db->get_where('student_subject', ['subject_id' => $subject_id])->result();
+            $students  = [];
+            if($student_ids){
+                foreach($student_ids as $k => $v){
+                    $sb = $this->db->get_where('users', ['id' => $v->student_id]);
+                    $students[] = $sb->num_rows() > 0 ? $sb->row() : '';
+                }
+            }
+
+            ajax_response(true, $students, 'Data found');
+        }
+
+    }
+
+    public function get_marks(){
+        $user = get_user_details();
+        $marks = [];
+        if($this->input->post()){
+            // preview($this->input->post());
+            $subject_id = $this->input->post('subject_id');
+            $student_id = $this->input->post('student_id');
+            $subject = $this->db->get_where('subjects',['id' => $subject_id])->row();
+            $marks = $this->db->get_where('marks', ['subject_id' => $subject_id, 'student_id' => $student_id]);
+            $data['subject_details'] = $subject ? $subject : '';
+            $data['subject_details']->marks = $marks->num_rows() > 0 ? $marks->result() :'';
+
+            ajax_response(true, $data, 'Data found');
+        }
+    }
 }

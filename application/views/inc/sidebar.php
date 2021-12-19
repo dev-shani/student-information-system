@@ -165,6 +165,11 @@
                     <i class="fas fa-fw fa-table"></i>
                     <span>Attendence</span></a>
                 </li>
+                <li class="nav-item">
+                <a class="nav-link" href="<?= base_url('student/marks') ?>">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Marks</span></a>
+                </li>
             <?php endif; ?>
 
 

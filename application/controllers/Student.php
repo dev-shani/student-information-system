@@ -44,5 +44,43 @@ class Student extends CI_Controller{
         $this->load->view('attendence/student-attendence', $data);
     }
 
+    public function marks(){
+        $user = get_user_details();
+        $subjects = [];
+        if($user->role == PARENT){
+            $st_id = $this->db->get_where('parent_student', ['parent_id' => $user->id])->row();
+            $user = $this->db->get_where('users',['id' => $st_id->student_id])->row();
+        }
+        $subject_ids = $this->db->get_where('student_subject',['student_id' => $user->id])->result();
+        if($subject_ids){
+            foreach($subject_ids as $k => $v){
+                $sb = $this->db->get_where('subjects', ['id' => $v->subject_id]);
+                $subjects[] = $sb->num_rows() > 0 ? $sb->row() : '';
+            }
+        }
+        $data['subjects'] = $subjects ? $subjects : '';
+        $this->load->view('marks/student_marks', $data);
+    }
+
+
+    public function get_marks(){
+        $user = get_user_details();
+        $marks = [];
+        if($user->role == PARENT){
+            $st_id = $this->db->get_where('parent_student', ['parent_id' => $user->id])->row();
+            $user = $this->db->get_where('users',['id' => $st_id->student_id])->row();
+        }
+
+        if($this->input->post()){
+            $subject_id = $this->input->post('subject_id');
+            $subject = $this->db->get_where('subjects',['id' => $subject_id])->row();
+            $marks = $this->db->get_where('marks', ['subject_id' => $subject_id, 'student_id' => $user->id]);
+            $data['subject_details'] = $subject ? $subject : '';
+            $data['subject_details']->marks = $marks->num_rows() > 0 ? $marks->result() :'';
+
+            ajax_response(true, $data, 'Data found');
+        }
+    }
+
 
 }

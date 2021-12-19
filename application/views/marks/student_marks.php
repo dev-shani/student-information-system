@@ -20,11 +20,8 @@
                             <select class="form-control mb-4" name="subject" id="">
                                 <option value="">Choose subject</option>
                                 <?php if($subjects): foreach($subjects as $k => $v): ?>
-                                    <option value="<?= $v->subject_id ?>"><?= $v->subject?> of class <?= $v->class?></option>
+                                    <option value="<?= $v->id ?>"><?= $v->subject_name ?></option>
                                 <?php endforeach; endif; ?>
-                            </select>
-                            <select class="form-control mb-4" name="student" id="">
-                                <option value="">Choose student</option>
                             </select>
                             <div class="table-responsive">
                                 <table class="table table-bordered" id="" width="100%" cellspacing="0">
@@ -57,36 +54,9 @@
 
             if(subjectId != ''){
                 $.ajax({
-                url: `<?= base_url('teacher/get_students') ?>`,
+                url: `<?= base_url('student/get_marks') ?>`,
                 method: 'POST',
                 data: {subject_id: subjectId},
-                success: function(response){
-                    res = JSON.parse(response);
-                    let students = res.data;
-                    let html = `<option value="">Choose student</option>`;
-                    for(let i =0; i < students.length; i++){
-                        if(students[i] != ''){
-                            html += `<option value="${students[i].id}">${students[i].first_name} ${students[i].last_name}</option>`;
-                        }
-                    }
-
-                    $('select[name=student]').empty();
-                    $('select[name=student]').append(html);
-
-                }
-            })
-            }
-        })
-
-        $(document).on('change','select[name=student]',function(){
-            let student_id = $(this).val();
-            let subject_id = $('select[name=subject]').val();
-
-            if(student_id != ''){
-                $.ajax({
-                url: `<?= base_url('teacher/get_marks') ?>`,
-                method: 'POST',
-                data: {student_id: student_id, subject_id: subject_id},
                 success: function(response){
                     res = JSON.parse(response);
                     let subject = res.data.subject_details;
