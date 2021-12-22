@@ -39,7 +39,7 @@ class Student extends CI_Controller{
             $st_id = $this->db->get_where('parent_student', ['parent_id' => $user->id])->row();
             $user = $this->db->get_where('users',['id' => $st_id->student_id])->row();
         }
-        $attendence = $this->db->get('attendance', ['id' => $user->id])->result();
+        $attendence = $this->db->get('attendance', ['student_id' => $user->id])->result();
         $data['attendence'] = $attendence ? $attendence : '';
         $this->load->view('attendence/student-attendence', $data);
     }

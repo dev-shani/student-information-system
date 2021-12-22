@@ -724,5 +724,51 @@ class Admin extends CI_Controller{
         }
     }
 
+
+    public function student_result(){
+        $classes = $this->admin_model->get_classes();
+        $data['classes'] = ($classes ? $classes : '');
+        $this->load->view('marks/admin_marks', $data);
+    }
+
+
+    public function get_student_marks(){
+
+        if($this->input->post()){
+            $student_id = $this->input->post('student_id');
+            // $subject = $this->db->get_where('subjects',['id' => $subject_id])->row();
+            $marks = $this->db->get_where('marks', ['student_id' => $student_id]);
+            // preview($marks->result());
+            $st_marks = [];
+            if($marks){
+                $marks = $marks->result();
+                foreach($marks as $k => $v){
+                    $sb = $this->db->get_where('subjects', ['id'=> $v->subject_id])->row();
+                    $v->subject_details = $sb ? $sb : '';
+                    $st_marks[] = $v;
+                }
+            }
+            $data['marks'] = $st_marks ? $st_marks : '';
+
+            ajax_response(true, $data, 'Data found');
+        }
+    }
+
+    public function student_attendance(){
+        $classes = $this->admin_model->get_classes();
+        $data['classes'] = ($classes ? $classes : '');
+        $this->load->view('attendence/admin-attendence', $data);
+    }
+
+    public function get_student_attendance(){
+        if($this->input->post()){
+            $student_id = $this->input->post('student_id');
+            $attendence = $this->db->get_where('attendance', ['student_id' => $student_id])->result();
+            // preview($this->db->last_query());
+            ajax_response(true, $attendence, "data found");
+        }
+    }
+  
+
 }
 

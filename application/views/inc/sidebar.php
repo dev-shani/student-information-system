@@ -95,6 +95,8 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="<?= base_url('admin/add_student') ?>">Add student</a>
                         <a class="collapse-item" href="<?= base_url('admin/students') ?>">Students</a>
+                        <a class="collapse-item" href="<?= base_url('admin/student_result') ?>">Result</a>
+                        <a class="collapse-item" href="<?= base_url('admin/student_attendance') ?>">Attendance</a>
                     </div>
                 </div>
             </li>
